@@ -1,13 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const connectDB = require("./config/db"); 
-const productoRuta = require("./src/rutas/producto.ruta"); 
-const adminRuta = require("./src/rutas/admin.ruta"); 
+const connectDB = require("./config/db");
+const productoRuta = require("./src/rutas/producto.ruta");
+const adminRuta = require("./src/rutas/admin.ruta");
 const usuarioRuta = require("./src/rutas/usuario.ruta");
 const cotizacionRuta = require("./src/rutas/cotizacion.ruta");
 const loginAdminRoutes = require("./src/rutas/loginAdmin.ruta");
-
 
 // Configuración de entorno
 dotenv.config();
@@ -24,15 +23,19 @@ app.use(express.json());
 
 // Rutas API
 app.use("/api", productoRuta);
-app.use("/api", adminRuta); 
+app.use("/api", adminRuta);
 app.use("/api", usuarioRuta);
 app.use("/api", cotizacionRuta);
 app.use("/api", loginAdminRoutes);
 
-
 // Ruta base
 app.get("/", (req, res) => {
   res.send("🚀 API Catálogo Plomería corriendo...");
+});
+
+// ✅ Ruta para mantener backend activo desde el frontend
+app.get("/api/ping", (req, res) => {
+  res.send("✅ Backend activo (ping recibido)");
 });
 
 // Puerto
