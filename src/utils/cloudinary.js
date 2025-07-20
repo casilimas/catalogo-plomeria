@@ -1,5 +1,6 @@
 const cloudinary = require("cloudinary").v2;
 const dotenv = require("dotenv");
+const { Readable } = require("stream");
 
 dotenv.config();
 
@@ -9,28 +10,32 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// 🔄 Subir archivo PDF directamente desde buffer
-const subirPDFBuffer = async (buffer, nombrePublico) => {
-  return await new Promise((resolve, reject) => {
+// ✅ Subir imagen desde buffer (para productos)
+const subirImagenBuffer = (buffer, nombreArchivo) => {
+  return new Promise((resolve, reject) => {
+    const readable = new Readable();
+    readable._read = () => {};
+    readable.push(buffer);
+    readable.push(null);
+
     const stream = cloudinary.uploader.upload_stream(
       {
-        resource_type: "raw", // para PDF
-        folder: "cotizaciones",
-        public_id: nombrePublico,
+        folder: "productos",
+        public_id: `productos/${nombreArchivo}`,
       },
       (error, result) => {
         if (error) {
-          console.error("❌ Error al subir buffer a Cloudinary:", error);
+          console.error("❌ Error al subir imagen:", error);
           return reject(error);
         }
         resolve(result);
       }
     );
-    stream.end(buffer);
+
+    readable.pipe(stream);
   });
 };
 
 module.exports = {
-  cloudinary,
-  subirPDFBuffer,
+  subirImagenBuffer,
 };
