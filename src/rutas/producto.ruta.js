@@ -9,6 +9,6 @@ const upload = require("../middlewares/uploadMiddleware");
 router.get("/productos", obtenerProductos);
 
 // ✅ Ruta protegida con subida de imagen
-router.post("/productos", proteger, upload.single("imagen"), crearProducto);
+router.post("/productos", proteger, upload.single("file"), crearProducto);
 
 module.exports = router;
