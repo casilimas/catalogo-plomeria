@@ -1,14 +1,17 @@
-// src/rutas/producto.ruta.js
 const express = require("express");
 const router = express.Router();
-const { crearProducto, obtenerProductos } = require("../controlador/productoControlador"); 
+
+const { crearProducto, obtenerProductos } = require("../controlador/productoControlador");
+const editarProducto = require("../controlador/editarProducto");
+
 const proteger = require("../middlewares/authMiddleware");
 const upload = require("../middlewares/uploadMiddleware");
 
-// 📌 Ruta pública: Ver todos los productos
+// Rutas públicas
 router.get("/productos", obtenerProductos);
 
-// ✅ Ruta protegida con subida de imagen
+// Rutas protegidas
 router.post("/productos", proteger, upload.single("file"), crearProducto);
+router.put("/productos/:id", proteger, upload.single("file"), editarProducto);
 
 module.exports = router;
